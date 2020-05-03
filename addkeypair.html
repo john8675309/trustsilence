@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Are You Sure You Want To Burn This</title>
+        <title>Add A Key Pair</title>
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
         <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
         <script src="js/jquery-3.5.0.min.js"></script>
@@ -72,38 +72,26 @@
             .css-input:focus {
                 outline:none;
             }
-        </style>
-        <script>
 
-        </script>
+        </style>
     </head>
 <body>
-<div align="center">Please Login To Decrypt</div><br />
+<div align="center">Create Key Pair</div><br />
 <table border="0">
     <tr>
-        <td>Username</td><td><input type="text" name="username" id="username" class="css-input"></td>
+        <td>Key Pair Description</td><td><input type="text" id="description" id="description" class="css-input"></td>
     </tr>
     <tr>
-        <td>Password</td><td><input type="password" name="password" id="password" class="css-input"></td>
+        <td>Their Public Key (Optional)</td><td><input type="text" id="publicKey" class="css-input"></td>
     </tr>
 </table>
 <br />
-<a href="#" class="btn_ok" onClick="login()">Login</a> <a href="#" class="btn_cancel" onClick="javascript:parent.quit();">Quit</a>
+<a href="#" class="btn_ok" onClick="createKeyPair()">Create Key Pair</a> <a href="#" class="btn_cancel" onClick="javascript:parent.jQuery.fancybox.close()">Cancel</a>
 
 <script>
-    function login() {
-        db = parent.getDB();
-        var username = $('#username').val();        
-        var password = $('#password').val();
-        db.transaction(function (tx) { 
-            tx.executeSql('SELECT * FROM users where username="'+username+'"', [], function (tx, results) { 
-                var len = results.rows.length, i; 
-                 for (i = 0; i < len; i++) {
-                    parent.comparePassword(password, results.rows.item(i).password);
-                } 
-  
-            }, null); 
-        });
+    function createKeyPair() {
+        parent.addKeyPair($('#description').val(),$('#publicKey').val());
+        parent.jQuery.fancybox.close();
     }
 </script>
 </body>

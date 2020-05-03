@@ -70,10 +70,20 @@ ipcMain.on('hash', (evt, arg) => {
     evt.reply('hash', hash(arg));
 })
 
+ipcMain.on('new-keypair', (evt, arg) => {
+    //evt.reply('hash', );
+    var obj = JSON.parse(arg);
+    key = generateKey();
+    var arr = {publicKey: encodeBase64(key.publicKey), secretKey: encodeBase64(key.secretKey), description: obj.description, encryptKey: obj.encryptKey};
+    evt.reply('keypair', JSON.stringify(arr));
+});
+
 ipcMain.on('compare', (evt, arg) => {
     //evt.reply('hash', );
-    console.log(arg);
-})
+    var obj = JSON.parse(arg);
+    var arr = {rawPassword: obj.rawPassword, status: compare(obj.rawPassword,obj.hash)};
+    evt.reply('login-hash',JSON.stringify(arr));
+});
 
 
 function hash(rawPassword, options = {}) {
@@ -89,7 +99,7 @@ function hash(rawPassword, options = {}) {
 function compare(rawPassword, hashedPassword) {
     try {
       const [ salt, rounds ] = hashedPassword.split('$');
-      const hashedRawPassword = this.hash(rawPassword, { salt, rounds });
+      const hashedRawPassword = hash(rawPassword, { salt, rounds });
       return hashedPassword === hashedRawPassword;
     } catch (error) {
       throw Error(error.message);
