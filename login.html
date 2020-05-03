@@ -1,0 +1,111 @@
+<html>
+    <head>
+        <title>Are You Sure You Want To Burn This</title>
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+        <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+        <script src="js/jquery-3.5.0.min.js"></script>
+        <link  href="css/jquery.fancybox.css" rel="stylesheet">
+        <script src="js/jquery.fancybox.js"></script>
+        <script>if (window.module) module = window.module;</script>
+        <style>
+            .btn_ok {
+                box-shadow: 0px 10px 14px -7px #3e7327;
+                background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
+                background-color:#77b55a;
+                border-radius:4px;
+                border:1px solid #4b8f29;
+                display:inline-block;
+                cursor:pointer;
+                color:#ffffff;
+                font-family:Arial;
+                font-size:25px;
+                font-weight:bold;
+                padding:6px 12px;
+                text-decoration:none;
+                text-shadow:0px 1px 0px #5b8a3c;
+            }
+            .btn_ok:hover {
+                background:linear-gradient(to bottom, #72b352 5%, #77b55a 100%);
+                background-color:#72b352;
+            }
+            .btn_ok:active {
+                position:relative;
+                top:1px;
+            }
+
+            .btn_cancel {
+                box-shadow: 0px 10px 14px -7px #cf866c;
+                background:linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+                background-color:#d0451b;
+                border-radius:4px;
+                border:1px solid #942911;
+                display:inline-block;
+                cursor:pointer;
+                color:#ffffff;
+                font-family:Arial;
+                font-size:25px;
+                font-weight:bold;
+                padding:6px 12px;
+                text-decoration:none;
+                text-shadow:0px 1px 0px #5b8a3c;
+            }
+            .btn_cancel:hover {
+                background:linear-gradient(to bottom, #bc3315 5%, #d0451b 100%);
+                background-color:#bc3315;
+            }
+            .btn_cancel:active {
+                position:relative;
+                top:1px;
+            }
+            .css-input {
+                padding: 5px;
+                font-size: 16px;
+                border-width: 1px;
+                border-color: #CCCCCC;
+                background-color: #FFFFFF;
+                color: #000000;
+                border-style: solid;
+                border-radius: 0px;
+                box-shadow: 0px 0px 5px rgba(66,66,66,.75);
+                text-shadow: 0px 0px 5px rgba(66,66,66,.75);
+            }
+            .css-input:focus {
+                outline:none;
+            }
+        </style>
+        <script>
+
+        </script>
+    </head>
+<body>
+<div align="center">Please Login To Decrypt</div><br />
+<table border="0">
+    <tr>
+        <td>Username</td><td><input type="text" name="username" id="username" class="css-input"></td>
+    </tr>
+    <tr>
+        <td>Password</td><td><input type="password" name="password" id="password" class="css-input"></td>
+    </tr>
+</table>
+<br />
+<a href="#" class="btn_ok" onClick="login()">Login</a> <a href="#" class="btn_cancel" onClick="javascript:parent.quit();">Quit</a>
+
+<script>
+    function login() {
+        db = parent.getDB();
+        var username = $('#username').val();        
+        var password = $('#password').val();
+        db.transaction(function (tx) { 
+            tx.executeSql('SELECT * FROM users where username="'+username+'"', [], function (tx, results) { 
+                var len = results.rows.length, i; 
+                 for (i = 0; i < len; i++) {
+                    parent.compare(password, results.rows.item(i).password);
+                    console.log(password, results.rows.item(i).password); 
+                } 
+  
+            }, null); 
+        });
+    }
+</script>
+</body>
+</html>

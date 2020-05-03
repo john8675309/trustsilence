@@ -1,0 +1,150 @@
+<html>
+    <head>
+        <title>Trust Silence</title>
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+        <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+        <script src="js/jquery-3.5.0.min.js"></script>
+        <link  href="css/jquery.fancybox.css" rel="stylesheet">
+        <script src="js/jquery.fancybox.js"></script>
+        <script>if (window.module) module = window.module;</script>
+    </head>
+<body>
+
+
+
+<script>
+    var key ="";
+    var db;
+    var passwordHash = "";
+    var decryptPassword = "";
+    var compare = "";
+    const {ipcRenderer} = require('electron');
+    function quit() {
+        ipcRenderer.send('close-me');
+    }
+    function burnQuestion() {
+        $.fancybox({
+            'width': '50%',
+            'height': '30%',
+            'autoScale': true,
+            'autoSize': false,
+            'fitToView': false,
+            'transitionIn': 'fade',
+            'transitionOut': 'fade',
+            'type': 'iframe',
+            'href': 'burn.html',
+            'closeButton': false,
+            'modal': true
+        });
+    }
+
+    function login() {
+        $.fancybox({
+            'width': '50%',
+            'height': '40%',
+            'autoScale': true,
+            'autoSize': false,
+            'fitToView': false,
+            'transitionIn': 'fade',
+            'transitionOut': 'fade',
+            'type': 'iframe',
+            'href': 'login.html',
+            'closeButton': false,
+            'modal': true,
+            'helpers': { 
+                'overlay': {closeClick: false} // prevents closing when clicking OUTSIDE fancybox 
+            }
+        });
+    }
+
+    function createAccount() {
+        $.fancybox({
+            'width': '50%',
+            'height': '50%',
+            'autoScale': true,
+            'autoSize': false,
+            'fitToView': false,
+            'transitionIn': 'fade',
+            'transitionOut': 'fade',
+            'type': 'iframe',
+            'href': 'create.html',
+            'closeButton': false,
+            'modal': true,
+            'helpers': { 
+                'overlay': {closeClick: false} // prevents closing when clicking OUTSIDE fancybox 
+            }
+        });
+    }
+
+    function generateKey() {
+        ipcRenderer.send('generate-key')
+    }
+
+    ipcRenderer.on('asynchronous-reply', (event, arg) => {
+        key = arg;
+    });
+    ipcRenderer.on('public-key', (event, arg) => {
+        console.log(arg);
+    });
+    ipcRenderer.on('private-key', (event, arg) => {
+        console.log(arg);
+    });
+    ipcRenderer.on('hash', (event, arg) => {
+        passwordHash = arg;
+    });
+
+    ipcRenderer.on('compare', (event, arg) => {
+        compare = arg;
+    });
+
+    function hash() {
+        ipcRenderer.send('hash',"password");
+    }
+
+    function getKey() {
+        return(key);
+    }
+
+    function getPasswordHash() {
+        return(passwordHash);
+    }
+
+    function compare(rawPassword,hash) {
+        var arr = [ rawPassword, hash ];
+        ipcRenderer.send('compare',JSON.stringify(arr));        
+    }
+
+    function setDecryptPassword(password) {
+        decryptPassword = password;
+    }
+
+    function getDecryptPassword() {
+        return decryptPassword;
+    }
+
+    function getDB() {
+        return(db);
+    }
+
+    $( document ).ready(function() {
+        db = openDatabase('trustSilence.db', '1.0', 'Trust Silence', 2 * 1024 * 1024);
+        db.transaction(function (tx) {
+            tx.executeSql('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username varchar(255), password varchar(255))'); 
+            tx.executeSql('CREATE TABLE IF NOT EXISTS keys (id INTEGER PRIMARY KEY, description varchar(255), encryptKey varchar(255), publicKey varchar(255), privateKey varchar(255),user INTEGER)'); 
+        });
+        db.transaction(function (tx) {
+            tx.executeSql('SELECT * from users', [], function (tx, results) {
+                var len = results.rows.length;
+                if (len == 0) {
+                    createAccount();
+                } else {
+                    login();
+                }
+            }, null);
+        });        
+
+    });
+</script>
+
+</body>
+</html>

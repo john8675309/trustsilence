@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title>Are You Sure You Want To Burn This</title>
+        <style>
+            .btn_ok {
+                box-shadow: 0px 10px 14px -7px #3e7327;
+                background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
+                background-color:#77b55a;
+                border-radius:4px;
+                border:1px solid #4b8f29;
+                display:inline-block;
+                cursor:pointer;
+                color:#ffffff;
+                font-family:Arial;
+                font-size:25px;
+                font-weight:bold;
+                padding:6px 12px;
+                text-decoration:none;
+                text-shadow:0px 1px 0px #5b8a3c;
+            }
+            .btn_ok:hover {
+                background:linear-gradient(to bottom, #72b352 5%, #77b55a 100%);
+                background-color:#72b352;
+            }
+            .btn_ok:active {
+                position:relative;
+                top:1px;
+            }
+
+            .btn_cancel {
+                box-shadow: 0px 10px 14px -7px #cf866c;
+                background:linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+                background-color:#d0451b;
+                border-radius:4px;
+                border:1px solid #942911;
+                display:inline-block;
+                cursor:pointer;
+                color:#ffffff;
+                font-family:Arial;
+                font-size:25px;
+                font-weight:bold;
+                padding:6px 12px;
+                text-decoration:none;
+                text-shadow:0px 1px 0px #5b8a3c;
+            }
+            .btn_cancel:hover {
+                background:linear-gradient(to bottom, #bc3315 5%, #d0451b 100%);
+                background-color:#bc3315;
+            }
+            .btn_cancel:active {
+                position:relative;
+                top:1px;
+            }
+        </style>
+    </head>
+<body>
+<p>Burning this database will write 0's over everything a few times, and then delete.<br />
+This process is COMPLETELY irreversible</p>
+<br />
+<a href="#" class="btn_ok" onClick="burnIt()">Burn It</a> <a href="#" class="btn_cancel" onClick="javascript:parent.jQuery.fancybox.close();">Cancel</a>
+
+<script>
+    function burnIt() {
+        parent.jQuery.fancybox.close();
+    }
+</script>
+</body>
+</html>
